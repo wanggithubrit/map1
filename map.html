@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Example</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRy831PBrB2RQd45sEE-hQ7MV3JjvlfHA&libraries=geometry"></script>
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    function initMap() {
+      const mapOptions = {
+        zoom: 14,
+        center: { lat:25.871299, lng: 93.754514  },
+      };
+      const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
+
+      const request = {
+        origin: new google.maps.LatLng(25.903730922657626, 93.71314381401676),
+        destination: new google.maps.LatLng(25.811973, 93.777173),
+        travelMode: google.maps.TravelMode.DRIVING,
+        
+      };
+
+      directionsService.route(request, function (result, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsRenderer.setDirections(result);
+          const route = result.routes[0].overview_path;
+          const routePolyline = new google.maps.Polyline({
+            path: route,
+            geodesic: true,
+            strokeColor: "#FF0000", // Red color
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+          });
+          routePolyline.setMap(map);
+        }
+      });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+  </script>
+</body>
+</html>
+ 
+
+
+ 
